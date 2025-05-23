@@ -1,14 +1,16 @@
 # Teaching Chatbot 
-### Using RAG, Llama Model, Qdrant(Vector DB), Langchain and Streamlit
+## Detailed blog post
+[Question Answer Chatbot using RAG, Llama and Qdrant](https://ranjankumar.in/question-answer-chatbot-using-rag-llama-qdrant-streamlit/)
+## Using RAG, Llama Model, Qdrant(Vector DB), Langchain and Streamlit
 ![](school-bot.png)
 
-### Command for data ingestion
+## Command for data ingestion
 `python data_ingestion.py`
 
-### Command for running the app
+## Command for running the app
 `streamlit run app.py`
 
-### Prerequisites:
+## Prerequisites:
 1. `Pdf`files of the the books should be downloaded in `ix-sst-ncert-democratic-politics`. <br><strong>Note:</strong> To generalise the chatbot, more book's pdf can be downoaded and ingestion code should be rerun.
 2. Qdrant should be running on `http://localhost:6333`
 3. Ollama with running Llama model
