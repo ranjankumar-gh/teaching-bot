@@ -1,9 +1,10 @@
 import streamlit as st
-from qdrant_client import QdrantClient
+from qdrant_client import QdrantClient, models
 from langchain_ollama.llms import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate
 
 qdrant_client = QdrantClient(url="http://localhost:6333")
+EMBEDDING_MODEL = "BAAI/bge-small-en"  # must match data_ingestion.py
 
 st.markdown("# Teaching Bot")
 st.markdown("#### Class: IX, Subject: sst, Board: NCERT, Topic: Democratic Politics")
@@ -25,20 +26,14 @@ if query := st.chat_input("What is up?"):
     st.session_state.messages.append({"role": "user", "content": query})
 
     # Connect with vector db for getting the context
-    search_results = qdrant_client.query(
-    collection_name="ix-sst-ncert-democratic-politics",
-    query_text=query
-    )
-    context = ""
-    no_of_docs = 2
-    count = 1
-    for search_result in search_results:
-        if search_result.score >= 0.8:
-            #print(f"Retrieved document: {search_result.document}, Similarity score: {search_result.score}")
-            context = context + search_result.document
-        if count >= no_of_docs:
-            break
-        count = count + 1
+    # At most 2 chunks, each scoring at least 0.8
+    search_results = qdrant_client.query_points(
+        "ix-sst-ncert-democratic-politics",
+        query=models.Document(text=query, model=EMBEDDING_MODEL),
+        limit=2,
+        score_threshold=0.8,
+    ).points
+    context = "\n\n".join(r.payload["document"] for r in search_results)
 
     # Using LLM for forming the answer
     template = """Instruction: {instruction}
