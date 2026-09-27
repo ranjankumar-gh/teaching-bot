@@ -46,10 +46,13 @@ if query := st.chat_input("What is up?"):
 
     chain = prompt | model
 
-    bot_response = chain.invoke({"instruction": "Answer the question based on the context below. If you cannot answer the question with the given context, answer with \"I don't know.\"", 
-            "context": context,
-            "query": query
-            })
+    bot_response = chain.invoke({
+        "instruction": "Answer the question based on the context below. "
+                       "If you cannot answer the question with the given context, "
+                       "answer with \"I don't know.\"",
+        "context": context,
+        "query": query,
+    })
 
     print(f'\nBot: {bot_response}')
 
